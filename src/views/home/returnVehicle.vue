@@ -1,0 +1,151 @@
+<template>
+  <div id="returnVehicle">
+    <navbar title="车辆归还" :left-show="true"  left-text="返回"></navbar>
+    <div class="wrapper">
+      <div class="form">
+<!--        <div class="cu-bar bg-white">-->
+<!--          <div class="action">-->
+<!--              <span class="text-xl text-bold">-->
+<!--                车辆状况-->
+<!--              </span>-->
+<!--          </div>-->
+<!--        </div>-->
+        <div class="cu-bar bg-white">
+          <div class="action">
+              <span class="text-df text-black">
+                车辆是否归还 <i class="text-red">*</i>
+              </span>
+          </div>
+        </div>
+        <div class="form-select flex align-center" @click="showPicker = true">
+          <span class="flex-1" :class="Sure === '是/否'?'text-gray':'text-black'">
+           {{Sure}}
+          </span>
+          <van-icon name="arrow-down"/>
+        </div>
+        <div class="cu-bar bg-white">
+          <div class="action">
+              <span class="text-df text-black">
+                车辆归还时间 <i class="text-red">*</i>
+              </span>
+          </div>
+        </div>
+        <div class="time">{{nowTime}}</div>
+        <div class="cu-bar bg-white">
+          <div class="action">
+              <span class="text-df text-black">
+                备注
+                <i class="text-red">*</i>
+              </span>
+          </div>
+        </div>
+        <div class="textarea flex justify-center align-center">
+          <van-field
+              class="area"
+              v-model="message"
+              rows="2"
+              autosize
+              type="textarea"
+              placeholder="请输入用车后车辆状况"
+              show-word-limit
+          />
+        </div>
+      </div>
+    </div>
+    <div class="button margin-xl">
+      <van-button type="primary"
+                  size="large"
+                  class="btn"
+                  color="#4161FF"
+                  round
+                  :disabled="buttonStu === false"
+                  :hairline="true"
+                  @click="carBack"
+      >
+        提交
+      </van-button>
+    </div>
+    <van-popup v-model="showPicker" round position="bottom">
+      <van-picker
+          show-toolbar
+          :columns="[
+              {
+                id:1,
+                text:'是'
+              },
+              {
+                id:2,
+                text:'否'
+              }
+          ]"
+          @cancel="showPicker = false"
+          @confirm="onConfirm"
+      />
+    </van-popup>
+  </div>
+</template>
+
+<script>
+import Navbar from "@/components/Navbar/Navbar";
+import {getTime} from "@/utils/utils";
+
+export default {
+  name: "returnVehicle",
+  components: {Navbar},
+  data() {
+    return {
+      value1: '',
+      Sure: '是/否',
+      showPicker: false,
+      nowTime: 0,
+      message:''
+    }
+  },
+  computed:{
+    buttonStu(){
+      return this.Sure !== '是/否' && this.message !== ''
+    }
+  },
+  created() {
+    const time = Date.parse(new Date())
+    this.nowTime = getTime(time)
+  },
+  methods: {
+    onConfirm(val) {
+      this.Sure = val.text
+      this.showPicker = false
+    },
+    carBack(){
+      this.$vConfirm('','确认归还车辆？','取消','确认')
+      .then(res=>{
+        this.$toast.success('归还成功')
+      })
+      .catch(()=>{
+      })
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+#returnVehicle {
+  .wrapper {
+    .form {
+      .time {
+        margin: 0 25px 0 25px;
+        font-size: 20px;
+      }
+
+      .textarea {
+        width: 100%;
+        .area {
+          width: 95%;
+          box-shadow: 0 0 (16px/2) 0 rgba(3, 0, 0, 0.09);
+          border-radius: (24px/2);
+          height: 150px;
+        }
+      }
+    }
+  }
+}
+</style>

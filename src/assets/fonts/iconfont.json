@@ -1,0 +1,86 @@
+{
+  "id": "1990004",
+  "name": "vue-h5",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3264815",
+      "name": "passwd",
+      "font_class": "passwd",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "13180539",
+      "name": "icon-gou_wu_che",
+      "font_class": "gou_wu_che",
+      "unicode": "e82a",
+      "unicode_decimal": 59434
+    },
+    {
+      "icon_id": "11592857",
+      "name": "快捷菜单",
+      "font_class": "huaban",
+      "unicode": "ea1a",
+      "unicode_decimal": 59930
+    },
+    {
+      "icon_id": "8760691",
+      "name": ".icon-dingbu",
+      "font_class": "dingbu",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "13765703",
+      "name": "icon-jiantou",
+      "font_class": "jiantou",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    },
+    {
+      "icon_id": "16586375",
+      "name": "icon-jiantou",
+      "font_class": "jiantouxia",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "1596590",
+      "name": "phone",
+      "font_class": "phone",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "12385830",
+      "name": "home",
+      "font_class": "shouye",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "16514568",
+      "name": "category",
+      "font_class": "category-copy",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "5402539",
+      "name": "售后客服",
+      "font_class": "shouhoukefu",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "6039171",
+      "name": "address",
+      "font_class": "address",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}
