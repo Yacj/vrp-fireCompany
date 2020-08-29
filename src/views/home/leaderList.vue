@@ -80,12 +80,13 @@ export default {
       ]
     },
     goRouter(data){
+      let id =data.id
       this.$router.push({
-        path:'/leaderReview'
+        path:'/leaderReview',
+        query:{id}
       })
     },
     test(){
-      console.log(this)
       this.getList()
       window.scrollTo(0, 0);
       this.$toast('刷新成功')

@@ -9,3 +9,4 @@ export const isPossWord = (str) =>{
 export const isUndef = (str) =>{
     return str === undefined || str === null
 }
+export const isWx = /micromessenger/i.test(navigator.userAgent.toLowerCase())

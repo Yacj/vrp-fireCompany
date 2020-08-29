@@ -2,11 +2,13 @@ import {Dialog} from "vant";
 import Vue from 'vue'
 
 Vue.prototype.$vAlert = function (title, message, successCallback) {
-    Dialog.alert({
-        title,
-        message,
-    }).then((res) => {
-        successCallback(res)
+    return new Promise(resolve => {
+        Dialog.alert({
+            title,
+            message,
+        }).then((res) => {
+            resolve(res)
+        })
     })
 }
 

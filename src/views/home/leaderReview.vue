@@ -69,17 +69,18 @@ export default {
     }
   },
   created() {
+    this.id = Number(this.$route.query.id)
+    console.log(this.id)
     let data = {
       account: '12',
       time: 1,
     }
     Object.assign(this.Review,data)
-    console.log(this.Review.time)
   },
   methods: {
     goRouter() {
       this.$router.push({
-        path: '/leaderAssigned'
+        path: '/leaderAssigned?'
       })
     }
   },

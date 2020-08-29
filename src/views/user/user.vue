@@ -6,17 +6,17 @@
         <img src="../../assets/img/Avatar.png" alt="">
       </div>
       <div class="header-right">
-        <template v-if="userInfo.name === ''">
+        <template v-if="userInfo.name === undefined ">
           <router-link to="/user/login" class="text-lg flex align-center">请登录</router-link>
         </template>
         <template v-else>
           <div class="flex" style="margin-bottom: 2px">
-            <div class="text-lg text-bold" style="margin-bottom:6px;margin-right: 10px">{{userInfo.name}}</div>
+            <div class="text-lg text-bold" style="margin-bottom:6px;margin-right: 10px">{{ userInfo.name }}</div>
             <div class="user-btn text-sm" style="margin-bottom: 6px">
               <span>机关科室</span>
             </div>
           </div>
-          <p class="text-lg text-bold">{{userInfo.phone}}</p>
+          <p class="text-lg text-bold">{{ userInfo.phone }}</p>
         </template>
       </div>
     </div>
@@ -49,9 +49,7 @@ export default {
   components: {Navbar, Tabbar},
   data() {
     return {
-      userInfo: {
-        name: '',
-      },
+      userInfo: {},
       cellList: [
         {
           icon: require('../../assets/img/user-icon1.png'),
@@ -78,12 +76,12 @@ export default {
       let uid = cookie.getCookie('uid')
       if (uid === '') {
         return this.$vConfirm('', '您尚未登录，请登录后重试', '返回', '去登陆')
-                .then((res) => {
-                 this.$router.push({
-                   path:'/user/login'
-                 })
-               })
-                .catch((err) => {
+            .then((res) => {
+              this.$router.push({
+                path: '/user/login'
+              })
+            })
+            .catch((err) => {
               console.log(err)
             })
       }
