@@ -1,13 +1,15 @@
 @import "normalize";
 @import "colorui";
+
 html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
-  -webkit-overflow-scrolling : touch;
+  -webkit-overflow-scrolling: touch;
 }
-html, body, #app{
-  width:100%;
-  height:100%;
+
+html, body, #app {
+  width: 100%;
+  height: 100%;
 }
 
 input[type="submit"], input[type="reset"], input[type="button"], input {
@@ -17,7 +19,7 @@ input[type="submit"], input[type="reset"], input[type="button"], input {
 
 body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, dt, dd, a, img, button, form, table, th, tr, td, tbody, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
@@ -34,21 +36,26 @@ body, div, ul, li, ol, h1, h2, h3, h4, h5, h6, input, textarea, select, p, dl, d
   margin: 0;
   padding: 0;
 }
+
 body {
   font-size: 12px/1.5;
-  font-family:-apple-system, BlinkMacSystemFont, Hiragino Sans GB, Roboto, Segoe UI, Microsoft Yahei, 微软雅黑, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, Arial, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-family: -apple-system, BlinkMacSystemFont, Hiragino Sans GB, Roboto, Segoe UI, Microsoft Yahei, 微软雅黑, Oxygen-Sans, Ubuntu, Cantarell, Helvetica, Arial, STHeiti, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   color: #555;
   background-color: #fff;
 }
+
 em, i {
   font-style: normal;
 }
-ul,li{
+
+ul, li {
   list-style-type: none;
 }
+
 strong {
   font-weight: normal;
 }
+
 .clearfix:after {
   content: "";
   display: block;
@@ -56,13 +63,16 @@ strong {
   height: 0;
   clear: both;
 }
+
 .clearfix {
   zoom: 1;
 }
+
 a {
   text-decoration: none;
   color: #969696;
 }
+
 a:hover {
   text-decoration: none;
 }
@@ -78,13 +88,17 @@ h1, h2, h3, h4, h5, h6 {
 img {
   border: none;
 }
-button,input,optgroup,select,textarea {
+
+button, input, optgroup, select, textarea {
   margin: 0;
   outline: none;
 }
 
 
-input[type=button], input[type=submit], input[type=file], button { cursor: pointer; -webkit-appearance: none; }
+input[type=button], input[type=submit], input[type=file], button {
+  cursor: pointer;
+  -webkit-appearance: none;
+}
 
 
 *,
@@ -128,12 +142,14 @@ div:focus {
 .fr {
   float: right;
 }
-.divHeight{
+
+.divHeight {
   height: (7px/2);
   background: #f1f1f1;
   width: 100%;
 }
-.form-select{
+
+.form-select {
   border: 2px solid rgba(239, 241, 245, 1);
   border-radius: 10px;
   margin: 0 25px 0 25px;
@@ -148,12 +164,18 @@ div:focus {
     margin-right: 15px;
   }
 }
-.box-shadow{
+
+.box-shadow {
   box-shadow: 0 0 (16px/2) 0 rgba(3, 0, 0, 0.09);
 }
-.navFixed{
+
+.navFixed {
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 1024;
+}
+
+.van-dialog {
+  border-radius: 5px !important;
 }

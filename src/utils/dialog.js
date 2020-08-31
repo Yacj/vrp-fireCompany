@@ -6,6 +6,7 @@ Vue.prototype.$vAlert = function (title, message, successCallback) {
         Dialog.alert({
             title,
             message,
+            confirmButtonColor:'#4161FF'
         }).then((res) => {
             resolve(res)
         })

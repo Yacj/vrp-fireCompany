@@ -6,7 +6,7 @@ axios.defaults.timeout = 50000;
 // 请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8;multipart/form-data'
 // 请求代理
-axios.defaults.baseURL = 'http://api.kudesoft.cn/tdk/';
+axios.defaults.baseURL = 'http://www.tuopuvip.com:8081/api/';
 // axios.defaults.baseURL = '/api';
 
 //  axios.interceptors.request.use(config => {
@@ -63,10 +63,9 @@ export function post(url, params = {}) {
         }
         /* qs.stringify(params) formdata格式转换
            不需要formdata 改成 JSON.stringify(params) 把 content-type 删除*/
-        axios.post(url, qs.stringify(params), {
+        axios.post(url, JSON.stringify(params), {
             headers: {
-                'sessionKey': uuid,
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json',
             }
         })
             .then(response => {

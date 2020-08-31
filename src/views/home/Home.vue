@@ -46,7 +46,7 @@
         </van-grid>
       </div>
     </div>
-<!--    <div style="height: 50px"></div>-->
+    <!--    <div style="height: 50px"></div>-->
     <tabbar :active="0"></tabbar>
   </div>
 </template>
@@ -56,7 +56,7 @@
 
 import Tabbar from "../../components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
-import {cookie} from "@/utils/utils";
+import {storage} from "@/utils/utils";
 
 export default {
   name: 'Home',
@@ -106,12 +106,12 @@ export default {
     }
   },
   created() {
-    this.uid = cookie.getCookie("uid")
+    this.userInfo = storage.get('userInfo')
   },
   methods: {
     goRouter(url) {
-      // if (this.uid === '') {
-      //    this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
+      // if (this.userInfo === null) {
+      //   this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
       //       .then(res => {
       //         this.$router.push({
       //           path: '/user/login'

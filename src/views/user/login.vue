@@ -12,11 +12,11 @@
       <div class="login-form">
         <van-cell-group :border="false">
           <van-field v-model="phone" type="number" label="" left-icon="iconfont icon-phone" placeholder="请输入手机号码">
-          <template slot="left-icon">
-            <i class="iconfont icon-phone text-xl"></i>
-          </template>
+            <template slot="left-icon">
+              <i class="iconfont icon-phone text-xl"></i>
+            </template>
           </van-field>
-          <van-field v-model="password" :type="passwordType"   placeholder="请输入8-16位密码" maxlength="16">
+          <van-field v-model="password" :type="passwordType" placeholder="请输入8-16位密码" maxlength="16">
             <template slot="left-icon">
               <i class="iconfont icon-passwd text-xl"></i>
             </template>
@@ -40,7 +40,7 @@
         </van-button>
         <div class="no-register text-lg text-center text-gray">
           <router-link to="register">
-            没有账号？  立即注册  >
+            没有账号？ 立即注册 >
           </router-link>
         </div>
       </div>
@@ -50,40 +50,71 @@
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
-import {isPhone, isPossWord} from "@/utils/validation";
+import {isPhone, isPossWord, isWx} from "@/utils/validation";
 import {Notify} from 'vant'
+import {UserService} from "@/api/user";
+import {storage} from "@/utils/utils";
+
 export default {
   name: "login",
   components: {Navbar},
-  data(){
-    return{
-      phone:'',
-      password:'',
+  data() {
+    return {
+      phone: '',
+      password: '',
       passwordType: 'password',
     }
   },
   created() {
   },
-  methods:{
-    showPassword(){
+  methods: {
+    showPassword() {
       this.passwordType = this.passwordType === 'password' ? 'text' : 'password'
     },
-    Login(){
+    Login() {
       let phone = this.phone
       let password = this.password
-      if(!isPhone(phone)){
+      if (!isWx) {
+        return this.$vAlert('提示', '请在微信内部登录').then(res => {
+        })
+      }
+      if (!isPhone(phone)) {
         return Notify('手机号有误，请重新输入')
       }
-      if(!isPossWord(password)){
-        return  Notify('密码不符合规范，请重新输入')
+
+      if (!isPossWord(password)) {
+        return Notify('密码不符合规范，请重新输入')
       }
+
+      const data = {
+        name: phone,
+        password
+      }
+      UserService.logon(data).then(res => {
+        let code = res.code
+        if (code !== 200) {
+          return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
+          })
+        }
+        let userInfo = {
+          phone: res.data.name,
+          deptId: res.data.deptId,
+          uid:res.data.id
+        }
+        storage.set('userInfo', userInfo)
+        this.$vAlert('提示', '登录成功').then(res => {
+          this.$router.push({
+            path: '/user'
+          })
+        })
+      })
     }
   },
-  computed:{
+  computed: {
     isLogin() {
       return this.phone !== "" && this.password !== ""
     },
-    passwordIcon(){
+    passwordIcon() {
       return this.passwordType === 'password' ? 'closed-eye' : 'eye'
     },
   }
@@ -91,47 +122,56 @@ export default {
 </script>
 
 <style scoped lang="scss">
-#login{
-  .header{
+#login {
+  .header {
     position: relative;
     overflow-y: hidden;
     padding: 40px 20px 50px;
-    .title{
-      font-size:22px;
+
+    .title {
+      font-size: 22px;
       letter-spacing: 2px;
       text-align: center;
-      font-weight:400;
-      color:rgba(255,255,255,1);
+      font-weight: 400;
+      color: rgba(255, 255, 255, 1);
     }
-    .bg{
+
+    .bg {
       width: 100%;
       height: auto;
       margin: 35px 0 25px 0;
-      img{
+
+      img {
         width: 200px;
       }
     }
   }
-  .wrapper{
+
+  .wrapper {
     top: -25px;
     background: #fff;
     display: block;
     padding: 30px 15px 0;
     position: relative;
     border-radius: 30px 30px 0 0;
-    .login-form{
+
+    .login-form {
       margin: 10px;
-      .tips{
+
+      .tips {
         margin: 15px 0 0 20px;
       }
     }
-    .login-btn{
+
+    .login-btn {
       margin-top: 30px;
-      .btn{
-        font-size:18px;
+
+      .btn {
+        font-size: 18px;
         letter-spacing: 5px;
       }
-      .no-register{
+
+      .no-register {
         margin-top: 20px;
       }
     }

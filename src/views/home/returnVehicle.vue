@@ -139,7 +139,7 @@ export default {
       .textarea {
         width: 100%;
         .area {
-          width: 95%;
+          width: 89%;
           box-shadow: 0 0 (16px/2) 0 rgba(3, 0, 0, 0.09);
           border-radius: (24px/2);
           height: 150px;

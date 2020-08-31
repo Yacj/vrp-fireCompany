@@ -7,14 +7,14 @@ module.exports = {
     return {
       optimization: {
         minimizer: [
-          new TerserPlugin({
-            sourceMap: false,
-            terserOptions: {
-              compress: {
-                drop_console: true,
-              },
-            },
-          }),
+          // new TerserPlugin({
+          //   sourceMap: false,
+          //   terserOptions: {
+          //     compress: {
+          //       drop_console: true,
+          //     },
+          //   },
+          // }),
           new CompressionWebpackPlugin({
             algorithm: 'gzip',
             test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),

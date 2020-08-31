@@ -1,23 +1,23 @@
 <template>
   <div id="carApplication">
-    <navbar title="用车申请" :left-show="true"  left-text="返回"></navbar>
+    <navbar title="用车申请" :left-show="true" left-text="返回"></navbar>
     <div class="wrapper">
       <van-cell-group :border="false">
         <van-field
-            v-model="account"
-            label="用车事由："
-            placeholder="填写用车事由"
+            v-model="CreateBy"
+            label="申请人："
+            placeholder="请填写申请人"
             input-align="right"
         />
         <van-field
-            v-model="pepole"
+            v-model="entourage"
             label="随行人："
             placeholder="填写随行人姓名"
             input-align="right"
         />
         <van-field
             readonly
-            v-model="Destinationval"
+            v-model="destination"
             label="目的地："
             placeholder="市内/市外"
             input-align="right"
@@ -26,7 +26,7 @@
         />
         <van-field
             readonly
-            v-model="carVal"
+            v-model="carSeats"
             label="车辆："
             placeholder="5座以内/5座以上"
             input-align="right"
@@ -35,7 +35,7 @@
         />
         <van-field
             readonly
-            v-model="driveVal"
+            v-model="carDriving"
             label="车辆驾驶："
             placeholder="自行驾驶/调派驾驶员"
             input-align="right"
@@ -46,7 +46,7 @@
         <div class="textarea flex justify-center align-center">
           <van-field
               class="area"
-              v-model="message"
+              v-model="remarks"
               rows="2"
               autosize
               type="textarea"
@@ -125,53 +125,67 @@
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
+import {storage} from "@/utils/utils";
+import {homeService} from "@/api/home";
 
 export default {
   name: "carApplication",
   components: {Navbar},
   data() {
     return {
-      account: '',
-      pepole: '',
-      message: '',
-      Destinationval: '',
+      CreateBy: '',
+      entourage: '',
+      remarks: '',
+      destination: '',
       showDestination: false,
-      carVal: '',
+      carSeats: '',
       showCar: false,
-      driveVal:'',
-      showdrive:false
+      carDriving: '',
+      showdrive: false
     }
   },
-  computed:{
-    info(){
-      return this.account !== '' && this.pepole !== '' && this.Destinationval !== '' && this.carVal !== '' && this.driveVal !== '' && this.message !== ''
+  computed: {
+    info() {
+      return this.CreateBy !== '' && this.entourage !== '' && this.destination !== '' && this.carSeats !== '' && this.carDriving !== '' && this.remarks !== ''
     }
   },
   methods: {
-    back(){
+    back() {
       this.$router.back()
     },
     onConfirm(val) {
-      this.Destinationval = val.text;
+      this.destination = val.text;
       this.Destinationid = val.id
       this.showDestination = false;
     },
     onCar(val) {
-      this.carVal = val.text;
+      this.carSeats = val.text;
       this.showCar = false;
     },
-    onDrive(val){
-      this.driveVal = val.text;
+    onDrive(val) {
+      this.carDriving = val.text;
       this.showdrive = false;
     },
-    Post(){
-      this.$vConfirm('','提交成功,请等待领导审核','返回','查看我的申请').then(res=>{
-        this.$router.push({
-          path:'/myApplication'
-        })
-      }).catch(res=>{
-
+    Post() {
+      let data = {
+        createId:storage.get('userInfo').uid,
+        CreateBy:this.CreateBy,
+        entourage:this.entourage,
+        destination:this.destination,
+        carSeats:this.carSeats,
+        carDriving:this.carDriving,
+        remarks:this.remarks
+      }
+      homeService.addApply(data).then(res=>{
+        console.log(res)
       })
+      // this.$vConfirm('', '提交成功,请等待领导审核', '返回', '查看我的申请').then(res => {
+      //   this.$router.push({
+      //     path: '/myApplication'
+      //   })
+      // }).catch(res => {
+      //
+      // })
     }
   }
 }

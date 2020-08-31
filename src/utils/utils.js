@@ -53,3 +53,4 @@ export  const getTime = (val) =>{
     let s = (date.getSeconds() < 10 ? "0" + (date.getSeconds()) : date.getSeconds());
     return Y + M + D + h + m;
 }
+

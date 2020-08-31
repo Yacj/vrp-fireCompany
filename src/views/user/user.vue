@@ -3,17 +3,18 @@
     <navbar title="我的"></navbar>
     <div class="header flex align-center bg-blue text-white">
       <div class="header-left">
-        <img src="../../assets/img/Avatar.png" alt="">
+        <img :src="userInfo.avatar === undefined ? require('../../assets/img/Avatar.png'):userInfo.avatar" alt=""
+             class="round">
       </div>
       <div class="header-right">
         <template v-if="userInfo.name === undefined ">
           <router-link to="/user/login" class="text-lg flex align-center">请登录</router-link>
         </template>
         <template v-else>
-          <div class="flex" style="margin-bottom: 2px">
-            <div class="text-lg text-bold" style="margin-bottom:6px;margin-right: 10px">{{ userInfo.name }}</div>
-            <div class="user-btn text-sm" style="margin-bottom: 6px">
-              <span>机关科室</span>
+          <div class="flex">
+            <div class="text-lg text-bold">{{ userInfo.name }}</div>
+            <div class="user-btn text-sm">
+              <span>{{Permissions}}</span>
             </div>
           </div>
           <p class="text-lg text-bold">{{ userInfo.phone }}</p>
@@ -42,7 +43,7 @@
 <script>
 import Tabbar from "@/components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
-import {cookie} from "@/utils/utils";
+import {storage} from "@/utils/utils";
 
 export default {
   name: "user",
@@ -50,6 +51,7 @@ export default {
   data() {
     return {
       userInfo: {},
+      getInfo: {},
       cellList: [
         {
           icon: require('../../assets/img/user-icon1.png'),
@@ -66,15 +68,43 @@ export default {
           text: '其它',
           url: '/user/info'
         }
-      ]
+      ],
+      Permissions: ""
     }
   },
   created() {
+    let userInfo = storage.get('userInfo')
+    let wxInfo = storage.get('wxInfo')
+
+    if (userInfo !== null) {
+      this.getInfo = Object.assign(userInfo, wxInfo)
+    }
+
+    this.getUserInfo()
   },
   methods: {
+    getUserInfo() {
+      if (this.getInfo.phone !== undefined) {
+        this.userInfo = this.getInfo
+        const list = new Map([
+          ['17', '主管领导'],
+          ['22', '消防科室分管领导'],
+          ['26', '车管领导'],
+          ['27', '驾驶员'],
+          ['28', '消防科室']
+        ])
+        const userPermissions = (id) => {
+          return list.get(id)
+        }
+        if (this.userInfo.deptId === null) {
+           this.Permissions = '暂无权限'
+        }else{
+          this.Permissions = userPermissions(this.userInfo.deptId)
+        }
+      }
+    },
     goPath(url) {
-      let uid = cookie.getCookie('uid')
-      if (uid === '') {
+      if (this.getInfo.phone === undefined) {
         return this.$vConfirm('', '您尚未登录，请登录后重试', '返回', '去登陆')
             .then((res) => {
               this.$router.push({
@@ -82,7 +112,6 @@ export default {
               })
             })
             .catch((err) => {
-              console.log(err)
             })
       }
       this.$router.push({
@@ -117,11 +146,20 @@ export default {
       flex: 1;
       padding-left: 10px;
 
-      .user-btn {
-        background: rgba(28, 61, 220, 1);
-        box-shadow: 0 0 5px 1px rgba(39, 40, 89, 0.19);
-        border-radius: 21px;
-        padding: 3px 7px 3px 7px
+      .flex {
+        margin-bottom: 2px;
+
+        .text-lg {
+          margin: 0 10px 6px 0;
+        }
+
+        .user-btn {
+          margin-bottom: 6px;
+          background: rgba(28, 61, 220, 1);
+          box-shadow: 0 0 5px 1px rgba(39, 40, 89, 0.19);
+          border-radius: 21px;
+          padding: 3px 7px 3px 7px
+        }
       }
     }
   }
