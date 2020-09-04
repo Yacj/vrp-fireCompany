@@ -92,15 +92,16 @@ export default {
       }
       UserService.logon(data).then(res => {
         let code = res.code
+        let {id, name, deptId} = res.data
+        let uid = id === null ? 0 : id
+        let userInfo = {
+          phone: name,
+          deptId,
+          uid
+        }
         if (code !== 200) {
           return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
           })
-        }
-        let uid = res.data.id === null ? 0 : res.data.id
-        let userInfo = {
-          phone: res.data.name,
-          deptId: res.data.deptId,
-          uid
         }
         this.$store.dispatch('setUserAsync', userInfo)
         storage.set('userInfo', userInfo)

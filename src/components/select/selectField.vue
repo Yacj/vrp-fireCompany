@@ -42,18 +42,18 @@ export default {
     };
   },
   created() {
-    if(this.name !== undefined){
+    if (this.name !== undefined) {
       this.result = this.name
     }
   },
   methods: {
     onConfirm(value) {
-      console.warn(value)
+      const {text, id} = value
       this.result = value.text;
       this.show = !this.show;
       let data = {
-        text: value.text,
-        id:value.id
+        text,
+        id
       }
       this.$emit("getMessage", data);
     },
@@ -66,9 +66,10 @@ export default {
       this.$emit("input", newVal);
     },
     name(val) {
-      if (val !== undefined) {
-        this.result = val
-      }
+      // if (val !== undefined) {
+      //   this.result = val
+      // }
+      this.result = val !== undefined ? val : ''
     }
   }
 }

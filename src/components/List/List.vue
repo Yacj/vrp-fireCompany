@@ -16,7 +16,7 @@
         <div class="text">
           <p>申请人：{{item.createBy}}</p>
           <p>随行人：{{item.entourage}}</p>
-          <p>驾驶员：{{item.carPeople === null ? '自行驾驶' : item.carPeople}}</p>
+          <p>驾驶员：{{item.carPeople === "" ? '自行驾驶' : item.carPeople}}</p>
           <p>目的地：{{item.destination}}</p>
           <!--          <p>分管领导：{{item.chargeLeaderName === null ? "" : item.chargeLeaderName}}</p>-->
           <p>

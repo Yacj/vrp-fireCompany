@@ -50,11 +50,12 @@ export default {
   },
   methods: {
     onConfirm(value) {
+      const {text, id} = value
       this.result = value.text;
       this.show = !this.show;
       let data = {
-        text: value.text,
-        id: value.id
+        text,
+        id
       }
       this.$emit("getMessage", data);
     },
