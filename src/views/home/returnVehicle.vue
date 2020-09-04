@@ -1,28 +1,22 @@
 <template>
   <div id="returnVehicle">
-    <navbar title="车辆归还" :left-show="true"  left-text="返回"></navbar>
+    <navbar title="车辆归还" :left-show="true" left-text="返回"></navbar>
     <div class="wrapper">
       <div class="form">
-<!--        <div class="cu-bar bg-white">-->
-<!--          <div class="action">-->
-<!--              <span class="text-xl text-bold">-->
-<!--                车辆状况-->
-<!--              </span>-->
-<!--          </div>-->
-<!--        </div>-->
-        <div class="cu-bar bg-white">
-          <div class="action">
-              <span class="text-df text-black">
-                车辆是否归还 <i class="text-red">*</i>
-              </span>
-          </div>
-        </div>
-        <div class="form-select flex align-center" @click="showPicker = true">
-          <span class="flex-1" :class="Sure === '是/否'?'text-gray':'text-black'">
-           {{Sure}}
-          </span>
-          <van-icon name="arrow-down"/>
-        </div>
+        <!--        <div class="cu-bar bg-white">-->
+        <!--          <div class="action">-->
+        <!--              <span class="text-xl text-bold">-->
+        <!--                车辆状况-->
+        <!--              </span>-->
+        <!--          </div>-->
+        <!--        </div>-->
+        <select-from title="车辆是否归还"
+                     label="是/否"
+                     v-model="Sure"
+                     :columns="[{id:1,text:'是'},{id:2,text:'否'}]"
+                     @getMessage="onConfirm"
+        >
+        </select-from>
         <div class="cu-bar bg-white">
           <div class="action">
               <span class="text-df text-black">
@@ -65,45 +59,30 @@
         提交
       </van-button>
     </div>
-    <van-popup v-model="showPicker" round position="bottom">
-      <van-picker
-          show-toolbar
-          :columns="[
-              {
-                id:1,
-                text:'是'
-              },
-              {
-                id:2,
-                text:'否'
-              }
-          ]"
-          @cancel="showPicker = false"
-          @confirm="onConfirm"
-      />
-    </van-popup>
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
-import {getTime} from "@/utils/utils";
+import {getTime, storage} from "@/utils/utils";
+import SelectFrom from "@/components/select/selectFrom";
+import {homeService} from "@/api/home";
 
 export default {
   name: "returnVehicle",
-  components: {Navbar},
+  components: {SelectFrom, Navbar},
   data() {
     return {
       value1: '',
       Sure: '是/否',
       showPicker: false,
       nowTime: 0,
-      message:''
+      message: ''
     }
   },
-  computed:{
-    buttonStu(){
-      return this.Sure !== '是/否' && this.message !== ''
+  computed: {
+    buttonStu() {
+      return this.Sure === '是' && this.message !== ''
     }
   },
   created() {
@@ -111,16 +90,28 @@ export default {
     this.nowTime = getTime(time)
   },
   methods: {
-    onConfirm(val) {
-      this.Sure = val.text
-      this.showPicker = false
+    onConfirm(data) {
+      console.log(data)
+      this.Sure = data.text
     },
-    carBack(){
-      this.$vConfirm('','确认归还车辆？','取消','确认')
-      .then(res=>{
-        this.$toast.success('归还成功')
-      })
-      .catch(()=>{
+    carBack() {
+      this.$vConfirm('', '确认归还车辆？', '取消', '确认')
+          .then(res => {
+            this.returnUserApply()
+          })
+          .catch(() => {
+          })
+    },
+    returnUserApply() {
+      let data = {
+        id: storage.get("uid"),
+        returnRemarks: this.message,
+        returnIs: "已归还"
+      }
+      homeService.returnUserApply(data).then(res => {
+        let code = res.code
+        if(code !== 200){return this.$vAlert('',`归还失败,${res.msg}`)}
+        this.$vAlert('','归还成功').then(res=>{})
       })
     }
   }
@@ -138,6 +129,7 @@ export default {
 
       .textarea {
         width: 100%;
+
         .area {
           width: 89%;
           box-shadow: 0 0 (16px/2) 0 rgba(3, 0, 0, 0.09);

@@ -46,20 +46,14 @@ export default {
   }
 }
 .refreshRe {
-  -webkit-animation: rotate 1.2s linear infinite; /*Safari and Chrome*/
+  animation:rotate 1.2s linear infinite;
 }
 @keyframes rotate {
   0%{
     transform:rotate(0deg);
-    -ms-transform:rotate(0deg);     /* IE 9 */
-    -moz-transform:rotate(0deg);    /* Firefox */
-    -o-transform:rotate(0deg);
   }
   100% {
     transform:rotate(360deg);
-    -ms-transform:rotate(360deg);   /* IE 9 */
-    -moz-transform:rotate(360deg);  /* Firefox */
-    -o-transform:rotate(360deg);
   }
 }
 

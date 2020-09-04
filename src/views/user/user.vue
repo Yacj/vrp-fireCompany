@@ -11,13 +11,15 @@
           <router-link to="/user/login" class="text-lg flex align-center">请登录</router-link>
         </template>
         <template v-else>
-          <div class="flex">
-            <div class="text-lg text-bold">{{ userInfo.name }}</div>
-            <div class="user-btn text-sm">
-              <span>{{Permissions}}</span>
+          <router-link to="/user/info">
+            <div class="flex">
+              <div class="text-lg text-bold">{{ userInfo.name }}</div>
+              <div class="user-btn text-sm">
+                <span>{{Permissions}}</span>
+              </div>
             </div>
-          </div>
-          <p class="text-lg text-bold">{{ userInfo.phone }}</p>
+            <p class="text-lg text-bold">{{ userInfo.phone }}</p>
+          </router-link>
         </template>
       </div>
     </div>
@@ -77,9 +79,8 @@ export default {
     let wxInfo = storage.get('wxInfo')
 
     if (userInfo !== null) {
-      this.getInfo = Object.assign(userInfo, wxInfo)
+      this.getInfo = {...userInfo, ...wxInfo}
     }
-
     this.getUserInfo()
   },
   methods: {
@@ -87,20 +88,22 @@ export default {
       if (this.getInfo.phone !== undefined) {
         this.userInfo = this.getInfo
         const list = new Map([
-          ['17', '主管领导'],
-          ['22', '消防科室分管领导'],
-          ['26', '车管领导'],
-          ['27', '驾驶员'],
-          ['28', '消防科室']
+          [0, '暂无权限'],
+          [17, '主管领导'],
+          [22, '消防科室分管领导'],
+          [26, '车管领导'],
+          [27, '驾驶员'],
+          [28, '消防科室']
         ])
         const userPermissions = (id) => {
           return list.get(id)
         }
-        if (this.userInfo.deptId === null) {
-           this.Permissions = '暂无权限'
-        }else{
-          this.Permissions = userPermissions(this.userInfo.deptId)
-        }
+        this.Permissions = userPermissions(this.userInfo.deptId)
+        // if (this.userInfo.deptId === null) {
+        //   this.Permissions = '暂无权限'
+        // } else {
+        //   this.Permissions =
+        // }
       }
     },
     goPath(url) {

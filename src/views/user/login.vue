@@ -96,11 +96,13 @@ export default {
           return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
           })
         }
+        let uid = res.data.id === null ? 0 : res.data.id
         let userInfo = {
           phone: res.data.name,
           deptId: res.data.deptId,
-          uid:res.data.id
+          uid
         }
+        this.$store.dispatch('setUserAsync', userInfo)
         storage.set('userInfo', userInfo)
         this.$vAlert('提示', '登录成功').then(res => {
           this.$router.push({

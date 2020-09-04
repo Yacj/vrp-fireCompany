@@ -6,7 +6,4 @@ export const isPossWord = (str) =>{
     return /^[0-9A-Za-z]{8,16}$/.test(str)
 }
 
-export const isUndef = (str) =>{
-    return str === undefined || str === null
-}
 export const isWx = /micromessenger/i.test(navigator.userAgent.toLowerCase())

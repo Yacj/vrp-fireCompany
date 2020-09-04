@@ -9,7 +9,7 @@
     <div class="wrapper margin">
       <div class="wrapper-1">
         <div class="margin-top bg-white" v-for="(item,index) in homeList" :key="index">
-          <div @click="goRouter(item.url)">
+          <div @click="goRouter(item.url,item.id)">
             <div class="content flex align-center justify-center">
               <div class="img">
                 <img :src="item.leftImg" alt="">
@@ -27,33 +27,33 @@
           </div>
         </div>
       </div>
-      <div class="wrapper-2">
-        <div class="text text-white text-bold flex align-center justify-center text-lg radius">
-          驾驶员功能
+      <template v-if="deptId === 27">
+        <div class="wrapper-2">
+          <div class="text text-white text-bold flex align-center justify-center text-lg radius">
+            驾驶员功能
+          </div>
+          <div class="icon flex align-center justify-center text-lg">
+            <van-icon name="play" class="" size="50px"/>
+          </div>
         </div>
-        <div class="icon flex align-center justify-center text-lg">
-          <van-icon name="play" class="" size="50px"/>
-        </div>
-      </div>
-      <div class="wrapper-3">
-        <van-grid :column-num="3">
-          <van-grid-item v-for="(item,index) in gridList" :key="index">
-            <img :src="item.icon">
-            <span>
+        <div class="wrapper-3">
+          <van-grid :column-num="3">
+            <van-grid-item v-for="(item,index) in gridList" :key="index">
+              <img :src="item.icon">
+              <span>
               {{item.text}}
             </span>
-          </van-grid-item>
-        </van-grid>
-      </div>
+            </van-grid-item>
+          </van-grid>
+        </div>
+      </template>
     </div>
-    <!--    <div style="height: 50px"></div>-->
+    <div style="height: 50px"></div>
     <tabbar :active="0"></tabbar>
   </div>
 </template>
 
 <script>
-
-
 import Tabbar from "../../components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
 import {storage} from "@/utils/utils";
@@ -68,25 +68,25 @@ export default {
           leftImg: require('../../assets/img/home-icon1.png'),
           topTitle: '用车申请',
           bottomTitle: '预约申请，按时出车',
-          url: '/carApplication'
+          url: '/carApplication',
         },
         {
           leftImg: require('../../assets/img/home-icon2.png'),
           topTitle: '我的申请',
           bottomTitle: '申请详情，随时查看',
-          url: '/myApplication'
+          url: '/myApplication',
         },
         {
           leftImg: require('../../assets/img/home-icon3.png'),
           topTitle: '车辆归还',
           bottomTitle: '用车完毕，还车入库',
-          url: '/returnVehicle'
+          url: '/returnVehicle',
         },
         {
           leftImg: require('../../assets/img/home-icon4.png'),
           topTitle: '领导审核',
           bottomTitle: '认真负责，安全用车',
-          url: '/leaderList'
+          url: '/leaderList',
         }
       ],
       gridList: [
@@ -102,25 +102,26 @@ export default {
           icon: require('../../assets/img/home-icon7.png'),
           text: '其它事项'
         }
-      ]
+      ],
+      deptId: 0
     }
   },
   created() {
     this.userInfo = storage.get('userInfo')
+    this.deptId = this.userInfo.deptId
   },
   methods: {
-    goRouter(url) {
-      // if (this.userInfo === null) {
-      //   this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
-      //       .then(res => {
-      //         this.$router.push({
-      //           path: '/user/login'
-      //         })
-      //       })
-      //       .catch(err => {
-      //       })
-      //   return
-      // }
+    goRouter(url, id) {
+      if (this.userInfo === null) {
+        return this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
+            .then(res => {
+              this.$router.push({
+                path: '/user/login'
+              })
+            })
+            .catch(err => {
+            })
+      }
       this.$router.push({
         path: url
       })

@@ -12,6 +12,9 @@ import { Grid, GridItem } from 'vant';
 import { Picker } from 'vant';
 import { Popup } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
+import { List } from 'vant';
+
+Vue.use(List);
 Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
 Vue.use(Popup);

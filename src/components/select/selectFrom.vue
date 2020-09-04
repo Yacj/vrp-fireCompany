@@ -1,0 +1,72 @@
+<template>
+  <div>
+    <div class="cu-bar bg-white">
+          <span class="text-df text-black margin-left">
+            {{title}}
+          </span>
+    </div>
+    <div class="form-select flex align-center" @click="show = !show">
+          <span class="flex-1" :class="result !== undefined ? 'text-black':'text-gray'">
+            {{result !== undefined ? result : $attrs.label}}
+          </span>
+      <van-icon name="arrow-down"/>
+    </div>
+    <van-popup v-model="show" position="bottom">
+      <van-picker
+          :columns="columns"
+          show-toolbar
+          @cancel="show = !show"
+          :title="$attrs.label"
+          @confirm="onConfirm"
+      />
+    </van-popup>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "selectFrom",
+  props: {
+    title: {
+      type: String
+    },
+    columns: {
+      type: Array
+    },
+    selectValue: {
+      type: String
+    },
+    name: {
+      type: String
+    }
+  },
+  created() {
+  },
+  data() {
+    return {
+      show: false,
+      result: this.selectValue
+    };
+  },
+  methods: {
+    onConfirm(value) {
+      this.result = value.text;
+      this.show = !this.show;
+      let data = {
+        text: value.text,
+        id: value.id
+      }
+      this.$emit("getMessage", data);
+    },
+  },
+  watch: {
+    name(val) {
+      this.result = val !== undefined ? val : ''
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+</style>

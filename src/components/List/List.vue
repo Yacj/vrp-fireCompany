@@ -1,12 +1,12 @@
 <template>
   <div id="List">
-    <div class="list" v-for="(item,index) in List" :key="index"  @click="getId(item.id)">
+    <div class="list" v-for="(item,index) in List" :key="index" @click="getId(item.id)">
       <div class="top padding flex align-center van-hairline--bottom">
         <div class="img">
           <img src="../../assets/img/Application-1.png" alt="">
         </div>
         <div class="text">
-          单据号：{{item.order}}
+          单据号：{{item.document}}
         </div>
       </div>
       <div class="bottom padding flex">
@@ -14,11 +14,20 @@
           <img src="../../assets/img/Application-2.png" alt="">
         </div>
         <div class="text">
-          <p>用车人：{{item.people}}</p>
-          <p>到达地：{{item.address}}</p>
-          <p>审批人：{{item.review}}</p>
-          <p>状态：待审批</p>
-          <div class="time text-gray">2020-08-12 14:00-2020-08-12 16:30</div>
+          <p>申请人：{{item.createBy}}</p>
+          <p>随行人：{{item.entourage}}</p>
+          <p>驾驶员：{{item.carPeople === null ? '自行驾驶' : item.carPeople}}</p>
+          <p>目的地：{{item.destination}}</p>
+          <!--          <p>分管领导：{{item.chargeLeaderName === null ? "" : item.chargeLeaderName}}</p>-->
+          <p>
+            分管审核：
+            <span :class="{'text-red':item.chargeLeaderStatus !== '通过'}">
+              {{item.chargeLeaderStatus === '通过' ? item.chargeLeaderStatus : "待审核"}} <template v-if="item.directorLeaderIs === 1">(需主管审核)</template>
+          </span>
+          </p>
+          <p v-if="item.directorLeaderName !== null">主管审核：通过</p>
+          <p v-if="item.carLeaderStatus !== null">车管审核：{{item.carLeaderStatus !== null ? '通过' : ''}}</p>
+          <div class="time text-gray">{{item.createTime}}</div>
         </div>
       </div>
     </div>
@@ -60,7 +69,7 @@ export default {
     }
 
     .text {
-      margin-left: 20px;
+      margin-left: 25px;
       font-size: (34px/2);
     }
   }
@@ -73,11 +82,11 @@ export default {
     }
 
     .text {
-      margin-left: 20px;
       font-size: (34px/2);
+      margin: -8px 0 0 25px;
 
       p {
-        line-height: 1.8;
+        line-height: 36px;
       }
     }
 

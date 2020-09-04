@@ -16,12 +16,8 @@ export default {
     };
   },
   watch: {
-    scrollTop(val) {
-      if (this.scrollTop > 500) {
-        this.goTopShow = true;
-      } else {
-        this.goTopShow = false;
-      }
+    scrollTop() {
+      this.goTopShow = this.scrollTop > 500;
     }
   },
   methods: {

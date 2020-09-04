@@ -152,7 +152,8 @@ export default {
       const data = {
         name: phone,
         password,
-        openid:getInfo.openid
+        openid:getInfo.openid,
+        username:getInfo.name
       }
 
       UserService.register(data).then(res => {

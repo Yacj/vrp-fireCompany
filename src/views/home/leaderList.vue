@@ -2,13 +2,17 @@
   <div id="leaderList">
     <navbar title="审核列表" left-text="返回" :left-show="true" class="navFixed"></navbar>
     <div class="wrapper margin-top-xll" v-if="leaderList.length > 0">
-      <list :list="leaderList" @getData="goRouter"></list>
+      <van-list v-model="loading"
+                :finished="finished"
+                finished-text="没有更多了"
+                @load="load_more">
+        <list :list="leaderList" @getData="goRouter"></list>
+      </van-list>
       <refresh @click.native="test"></refresh>
     </div>
-    <div class="nodata margin-top-xll" v-else>
+    <div class="emptyCenter" v-else>
       <van-empty description="暂无审核信息"/>
     </div>
-
     <back-top></back-top>
   </div>
 </template>
@@ -18,83 +22,84 @@ import Navbar from "@/components/Navbar/Navbar";
 import list from "@/components/List/List";
 import BackTop from "@/components/floatButton/backTop";
 import Refresh from "@/components/floatButton/refresh";
+import {homeService} from "@/api/home";
+import {storage} from "@/utils/utils";
 
 export default {
   name: "leaderList",
   components: {Refresh, BackTop, list, Navbar},
-  data(){
-    return{
-      leaderList:[]
+  data() {
+    return {
+      loading: false,
+      finished: false,
+      leaderList: [],
+      pageNum: 1
     }
   },
   created() {
+    let deptId = storage.get("userInfo").deptId
+    if (deptId === 27 || deptId === 28) {
+      return this.$vAlert('', '此页面需主管权限才可进入').then(res => {
+        this.$router.back()
+      })
+    }
   },
   mounted() {
+    // console.log(this.$store.state.userInfo.uid)
     this.getList()
   },
-  methods:{
-    getList(){
-      this.leaderList = [
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-        {
-          order: 1212,
-          people: '张三',
-          review: '王虎',
-          id: 23
-        },
-      ]
+  methods: {
+    load_more() {
+      let timer = setTimeout(() => {
+        this.getList()
+        this.pageNum++;
+        this.finished && clearTimeout(timer)
+      }, 100)
     },
-    goRouter(data){
-      let id =data.id
-      this.$router.push({
-        path:'/leaderReview',
-        query:{id}
+    getList() {
+      // this.$store.commit('showLoading')
+      // this.$store.commit('hideLoading')
+      let pageNum = this.pageNum
+      let data = {
+        pageNum
+      }
+      homeService.GetOrderCheck(data).then(res => {
+        let content = res.data.content
+        this.leaderList = content
+        if (content.length === 0 || content.length <= 10) {
+          this.finished = true
+          return
+        }
+        this.leaderList.push(...content)
+        this.loading = false
       })
     },
-    test(){
+    goRouter(data) {
+      let id = data.id
+      let deptId = storage.get("userInfo").deptId
+      if (deptId === 22 || deptId === 17) {
+        this.$router.push({
+          path: '/leaderReview',
+          query: {id,deptId}
+        })
+      } else {
+        this.$router.push({
+          path: '/leaderAssigned',
+          query: {id,deptId}
+        })
+      }
+    },
+    test() {
       this.getList()
-      window.scrollTo(0, 0);
-      this.$toast('刷新成功')
+      window.scrollTo({
+        top:0,
+        behavior: 'smooth'
+      })
+      this.$toast('数据刷新成功')
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-
 </style>
