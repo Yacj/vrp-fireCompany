@@ -49,7 +49,7 @@ export default {
   methods: {
     onConfirm(value) {
       const {text, id} = value
-      this.result = value.text;
+      this.result = text ;
       this.show = !this.show;
       let data = {
         text,
@@ -66,9 +66,6 @@ export default {
       this.$emit("input", newVal);
     },
     name(val) {
-      // if (val !== undefined) {
-      //   this.result = val
-      // }
       this.result = val !== undefined ? val : ''
     }
   }

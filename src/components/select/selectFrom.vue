@@ -51,7 +51,7 @@ export default {
   methods: {
     onConfirm(value) {
       const {text, id} = value
-      this.result = value.text;
+      this.result = text
       this.show = !this.show;
       let data = {
         text,

@@ -87,6 +87,7 @@ export default {
   },
   created() {
     const time = Date.parse(new Date())
+    console.log(new Date())
     this.nowTime = getTime(time)
   },
   methods: {

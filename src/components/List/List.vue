@@ -22,10 +22,10 @@
           <p>
             分管审核：
             <span :class="{'text-red':item.chargeLeaderStatus !== '通过'}">
-              {{item.chargeLeaderStatus === '通过' ? item.chargeLeaderStatus : "待审核"}} <template v-if="item.directorLeaderIs === 1">(需主管审核)</template>
+              {{item.chargeLeaderStatus === '通过' ? item.chargeLeaderStatus : "待审核"}} <template v-if="item.directorLeaderIs === 1">(需主官审核)</template>
           </span>
           </p>
-          <p v-if="item.directorLeaderName !== null">主管审核：通过</p>
+          <p v-if="item.directorLeaderName !== null">主官审核：通过</p>
           <p v-if="item.carLeaderStatus !== null">车管审核：{{item.carLeaderStatus !== null ? '通过' : ''}}</p>
           <div class="time text-gray">{{item.createTime}}</div>
         </div>

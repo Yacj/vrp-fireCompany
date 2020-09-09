@@ -13,7 +13,9 @@ import { Picker } from 'vant';
 import { Popup } from 'vant';
 import { Checkbox, CheckboxGroup } from 'vant';
 import { List } from 'vant';
+import { DatetimePicker } from 'vant';
 
+Vue.use(DatetimePicker);
 Vue.use(List);
 Vue.use(Checkbox);
 Vue.use(CheckboxGroup);

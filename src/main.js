@@ -9,6 +9,7 @@ import './assets/css/common.scss'
 import '../src/utils/dialog'
 import '../src/utils/wx'
 
+
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {

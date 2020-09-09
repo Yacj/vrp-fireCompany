@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 const originalReplace = VueRouter.prototype.replace;
 VueRouter.prototype.replace = function replace(location) {
     return originalReplace.call(this, location).catch(err => err);
@@ -46,9 +47,9 @@ const routes = [
     },
     {
         path: '/leaderList',
-        name:'leaderList',
-        meta:{},
-        component:()=>import('../views/home/leaderList')
+        name: 'leaderList',
+        meta: {},
+        component: () => import('../views/home/leaderList')
     },
     {
         path: '/leaderReview',
@@ -96,6 +97,38 @@ const routes = [
             title: '其他'
         },
         component: () => import('../views/user/info')
+    },
+    {
+        path: '/drive/list',
+        name: 'driveList',
+        meta: {
+            title: '车辆列表'
+        },
+        component: () => import('../views/drive/list')
+    },
+    {
+        path: '/drive/fuel',
+        name: 'fuel',
+        meta: {
+            title: '加油登记'
+        },
+        component: () => import('../views/drive/fuel')
+    },
+    {
+        path: '/drive/maintain',
+        name: 'maintain',
+        meta: {
+            title: '车辆维修'
+        },
+        component: () => import('../views/drive/maintain')
+    },
+    {
+        path: '/drive/other',
+        name: 'other',
+        meta: {
+            title: '其实事项'
+        },
+        component: () => import('../views/drive/other')
     }
 ]
 

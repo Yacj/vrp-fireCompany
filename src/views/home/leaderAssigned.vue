@@ -68,8 +68,10 @@ export default {
 
     this.chargeLeaderId = storage.get("userInfo").uid
     this.chargeLeaderName = storage.get('wxInfo').name
+
     this.getList()
     this.getCar()
+
   },
   methods: {
     async getList() {

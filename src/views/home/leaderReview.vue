@@ -25,7 +25,7 @@
           />
         </div>
         <div class="sure margin margin-top-xl" v-if="deptId === 22">
-          <van-checkbox v-model="checked">由主管领导审批</van-checkbox>
+          <van-checkbox v-model="checked">由主官领导审批</van-checkbox>
         </div>
       </van-cell-group>
       <transition name="fade">
@@ -82,7 +82,7 @@ export default {
     this.id = +id
     this.deptId = +deptId
 
-    this.title = this.deptId === 22 ? '分管领导审核' : '主管领导审核'
+    this.title = this.deptId === 22 ? '分管领导审核' : '主官领导审核'
 
     let {uid, phone} = storage.get('userInfo')
 
@@ -122,7 +122,7 @@ export default {
       }
       homeService.ChargeLeaderCheck(data).then(res => {
         let code = res.code
-        let text = this.checked === true ? '提交成功,已提交给主管领导审批' : '审核成功'
+        let text = this.checked === true ? '提交成功,已提交给主官领导审批' : '审核成功'
 
         if (code !== 200) {
           return this.$vConfirm('', `审核失败 ${res.msg}`).then(res => {

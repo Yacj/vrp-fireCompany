@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <navbar title="消防公务用车调度平台"></navbar>
-    <div class="header">
+    <navbar title="消防公务用车调度平台" class="navFixed"></navbar>
+    <div class="header" style="margin-top: 46px">
       <div class="header-img">
         <img src="../../assets/img/home-bg.png" alt="">
       </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="wrapper-3">
           <van-grid :column-num="3">
-            <van-grid-item v-for="(item,index) in gridList" :key="index">
+            <van-grid-item v-for="(item,index) in gridList" :key="index" :to="'/drive/list?id='+(index+1)">
               <img :src="item.icon">
               <span>
               {{item.text}}
@@ -92,15 +92,18 @@ export default {
       gridList: [
         {
           icon: require('../../assets/img/home-icon5.png'),
-          text: '车辆维修'
+          text: '车辆维修',
+          url:'/home'
         },
         {
           icon: require('../../assets/img/home-icon6.png'),
-          text: '加油登记'
+          text: '加油登记',
+          url:'/drive/fuel'
         },
         {
           icon: require('../../assets/img/home-icon7.png'),
-          text: '其它事项'
+          text: '其它事项',
+          url:'/home'
         }
       ],
       deptId: 0
