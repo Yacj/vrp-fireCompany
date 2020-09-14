@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <Loading v-show="LOADING"></Loading>
-    <router-view/>
+    <keep-alive>
+      <!-- 需要缓存的视图组件 -->
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <!-- 不需要缓存的视图组件 -->
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 <script>
@@ -12,38 +16,9 @@ export default {
   name: 'App',
   components: {Loading},
   computed: {
-    ...mapState([
-      'LOADING'
-    ])
   },
   created() {
     this.resize(document, window)
-    const dataA = [
-      {cid: 125, name: 'y1'},
-      {cid: 845, name: 'y2'},
-      {cid: 956, name: 'y3'},
-      {cid: 634, name: 'y4'},
-    ]
-    const dataB = [
-      {uid: 984, name: 'x1'},
-      {uid: 9634, name: 'x2'},
-      {uid: 6574, name: 'x3'},
-      {uid: 39764, name: 'x4'},
-      {uid: 3164, name: 'x5'},
-      {uid: 7421, name: 'x6'},
-    ]
-    const dataC = [
-      {id: 1245, cid: 125, uid: 984},
-      {id: 1237, cid: 845, uid: 3164}
-    ]
-    const CrossData = dataA.map(iA => {
-      return [iA.name, ...dataB.map(iB => {
-        let c = dataC.find(iC => iC.cid === iA.cid && iC.uid === iB.uid)
-        return {
-          cid: iA.cid, uid: iB.uid, id: c && c.id, exist: !!c
-        }
-      })]
-    })
   },
   methods: {
     resize(doc, win) {

@@ -1,7 +1,7 @@
 <template>
   <div id="maintain">
     <navbar title="车辆维修" :left-show="true" left-text="返回" class="navFixed"></navbar>
-    <div class="wrapper margin-top-xll">
+    <div class="wrapper" style="padding-top:50px">
       <div class="wrapper-1 margin">
         <div class="header text-lg">
           <h1>车辆信息</h1>

@@ -6,7 +6,7 @@ axios.defaults.timeout = 50000;
 // 请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8;multipart/form-data'
 // 请求代理
-axios.defaults.baseURL = 'http://www.tuopuvip.com:8081/api/';
+axios.defaults.baseURL = 'http://www.whxf.site:8081/api/';
 // axios.defaults.baseURL = '/api';
 
 //  axios.interceptors.request.use(config => {

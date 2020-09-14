@@ -31,7 +31,7 @@
                     v-for="(item,index) in cellList"
                     :key="index"
                     @click="goPath(item.url)">
-            <template slot="icon">
+            <template slot="icon" >
               <img :src="item.icon" :alt="item.text">
             </template>
           </van-cell>
@@ -56,14 +56,9 @@ export default {
       getInfo: {},
       cellList: [
         {
-          icon: require('../../assets/img/user-icon1.png'),
-          text: '待审核',
-          url: '/home'
-        },
-        {
           icon: require('../../assets/img/user-icon2.png'),
           text: '我的申请',
-          url: '/leaderReview'
+          url: '/myApplication'
         },
         {
           icon: require('../../assets/img/user-icon3.png'),

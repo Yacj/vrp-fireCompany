@@ -57,6 +57,7 @@
 import Tabbar from "../../components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
 import {storage} from "@/utils/utils";
+import user from "@/views/user/user";
 
 export default {
   name: 'Home',
@@ -110,12 +111,16 @@ export default {
     }
   },
   created() {
-    this.userInfo = storage.get('userInfo')
-    this.deptId = this.userInfo.deptId
+    let userInfo = storage.get('userInfo')
+    console.log(userInfo)
+    if(userInfo !== null){
+      this.userInfo = userInfo
+      this.deptId = this.userInfo.deptId
+    }
   },
   methods: {
     goRouter(url, id) {
-      if (this.userInfo === null) {
+      if (this.deptId === 0) {
         return this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
             .then(res => {
               this.$router.push({

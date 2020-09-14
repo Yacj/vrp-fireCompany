@@ -103,6 +103,7 @@ export default {
       UserService.sms(data).then(res => {
         let code = res.code
         if (code !== 200) {
+          return Notify('验证码发送失败')
         }
         Notify({
           type: 'success',
@@ -132,8 +133,7 @@ export default {
       if (openid === undefined) {
         return this.$vConfirm('提示', '您尚未微信授权，请授权后再注册', '取消', '去授权').then(res => {
           window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb39a74613096584f&redirect_uri=https://www.tuopuvip.com/api/wxlogin.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-        }).catch(err => {
-        })
+        }).catch(err => {})
       }
 
       if (!isPhone(phone)) {

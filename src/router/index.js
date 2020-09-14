@@ -33,7 +33,7 @@ const routes = [
         path: '/myApplication',
         name: 'myApplication',
         meta: {
-            title: '我的申请'
+            title: '我的申请',
         },
         component: () => import('../views/home/myApplication')
     },
@@ -102,7 +102,8 @@ const routes = [
         path: '/drive/list',
         name: 'driveList',
         meta: {
-            title: '车辆列表'
+            title: '车辆列表',
+            keepAlive: true,
         },
         component: () => import('../views/drive/list')
     },

@@ -147,17 +147,14 @@ export default {
       }
       homeService.DirectorLeaderCheck(data).then(res => {
         let code = res.code
-
         if (code !== 200) {
           return this.$vConfirm('', `审核失败 ${res.msg}`).then(res => {
           })
         }
-
         this.$vConfirm('', '审核成功', '取消', '返回审核列表').then(res => {
           this.$router.back()
         }).catch(error => {
         })
-
       })
     }
   },

@@ -78,6 +78,7 @@ export default {
         return this.$vAlert('提示', '请在微信内部登录').then(res => {
         })
       }
+
       if (!isPhone(phone)) {
         return Notify('手机号有误，请重新输入')
       }
@@ -92,16 +93,17 @@ export default {
       }
       UserService.logon(data).then(res => {
         let code = res.code
-        let {id, name, deptId} = res.data
+        if (code !== 200) {
+          return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
+            console.log(res)
+          })
+        }
+        const {id, name, deptId} = res.data
         let uid = id === null ? 0 : id
         let userInfo = {
           phone: name,
           deptId,
           uid
-        }
-        if (code !== 200) {
-          return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
-          })
         }
         this.$store.dispatch('setUserAsync', userInfo)
         storage.set('userInfo', userInfo)

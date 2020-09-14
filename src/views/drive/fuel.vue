@@ -35,6 +35,12 @@
           </van-field>
           <van-cell>
             <div slot="default" class="text-df">
+              加油时间<i class="text-red margin-left-xs">*</i>
+            </div>
+          </van-cell>
+          <van-field v-model="gasolineTime" readonly placeholder="请选择加油时间" @click="showTime = true"></van-field>
+          <van-cell>
+            <div slot="default" class="text-df">
               金额<i class="text-red margin-left-xs">*</i>
             </div>
           </van-cell>
@@ -52,12 +58,24 @@
         </van-button>
       </div>
     </div>
+    <van-popup v-model="showTime" position="bottom">
+      <van-datetime-picker
+          v-model="currentDate"
+          type="datetime"
+          title="选择加油时间"
+          :min-date="minDate"
+          :max-date="maxDate"
+          @confirm="getTime"
+          @cancel="showTime = false"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
 import {DriverServe} from "@/api/Driver";
+import {getTime} from "@/utils/utils";
 
 export default {
   name: "fuel",
@@ -67,7 +85,12 @@ export default {
       kilometers: '',
       gasolineBrand: '',
       gasolineMoney: '',
-      gasolineNumber: ''
+      gasolineNumber: '',
+      gasolineTime: '',
+      showTime: false,
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2050, 10, 1),
+      currentDate: new Date(),
     }
   },
   created() {
@@ -82,21 +105,33 @@ export default {
         this.createId = createId
       })
     },
+    getTime() {
+      const time = Date.parse(this.currentDate)
+      this.gasolineTime = getTime(time)
+      this.showTime = false
+    },
     Post() {
       let data = {
+        applyId: this.id,
+        createId: this.createId,
         kilometers: +this.kilometers,
         gasolineBrand: this.gasolineBrand,
         gasolineMoney: +this.gasolineMoney,
-        gasolineNumber: +this.gasolineNumber
+        gasolineNumber: +this.gasolineNumber,
+        gasolineTime: this.gasolineTime + ":00"
       }
       DriverServe.addDriverGasoline(data).then(res => {
-        console.log(res)
+        let code = res.code
+        if (code !== 200) {
+          return this.$vAlert('', `登记失败,${res.msg}`).then(res => {})
+        }
+        this.$vAlert('', '登记成功').then(res => {})
       })
     }
   },
   computed: {
     disabled() {
-      return this.kilometers !== "" && this.gasolineBrand !== "" && this.gasolineMoney !== "" && this.gasolineNumber !== ""
+      return this.kilometers !== "" && this.gasolineBrand !== "" && this.gasolineMoney !== "" && this.gasolineNumber !== "" && this.gasolineTime !== ""
     }
   }
 }

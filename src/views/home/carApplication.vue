@@ -164,8 +164,10 @@ export default {
       this.carPeopleId = data.id
     },
     Post() {
+      let {uid,deptId} = storage.get('userInfo')
       let data = {
-        createId: storage.get('userInfo').uid,
+        createId:uid,
+        deptId,
         createBy: this.CreateBy,
         entourage: this.entourage,
         destination: this.destination,
@@ -187,7 +189,6 @@ export default {
             path: '/myApplication'
           })
         }).catch(res => {
-
         })
       })
     }

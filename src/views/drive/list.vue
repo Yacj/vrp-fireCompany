@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     <navbar title="车辆列表" left-text="返回" :left-show="true" class="navFixed"></navbar>
-    <div class="wrapper margin-top-xll">
+    <div class="wrapper" style="padding-top: 50px" v-if="DriveList.length > 0">
       <div class="list" v-for="(item,index) in DriveList" :key="index" @click="goPages(item.id)">
         <div class="top padding flex align-center van-hairline--bottom">
           <div class="img">
@@ -23,6 +23,9 @@
         </div>
       </div>
     </div>
+    <div class="noData emptyCenter" v-else>
+      <van-empty description="暂无车辆列表信息" />
+    </div>
     <back-top></back-top>
   </div>
 </template>
@@ -41,9 +44,10 @@ export default {
     }
   },
   created() {
+    this.getDriveList()
     this.queryId = this.$route.query.id
   },
-  mounted() {
+  activated(){
     this.getDriveList()
   },
   methods: {

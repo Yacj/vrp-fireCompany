@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="cu-bar bg-white">
+    <div class="cu-bar bg-white" v-if="titleShow">
           <span class="text-df text-black margin-left">
             {{title}}
           </span>
@@ -38,6 +38,10 @@ export default {
     },
     name: {
       type: String
+    },
+    titleShow:{
+      type:Boolean,
+      default:true
     }
   },
   created() {

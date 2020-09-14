@@ -13,19 +13,6 @@ import '../src/utils/wx'
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-    // if (to.meta.title) {
-    //   document.title = to.meta.title
-    // }
-    // if (to.meta.needLogin) {
-    //   //页面是否登录
-    //   if (cookie.getCookie("token")) {
-    //     next(); //表示已经登录
-    //   } else {
-    //     next({
-    //       path: '/login',
-    //     })
-    //   }
-    // }
     next()
 })
 

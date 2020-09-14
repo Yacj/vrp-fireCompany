@@ -5,15 +5,19 @@ export const DriverServe = {
         return get('getDriverUserApply', param)
     },
     //获取车辆信息
-    getDriverUserApplyDetails(param){
-        return get('getDriverUserApplyDetails',param)
+    getDriverUserApplyDetails(param) {
+        return get('getDriverUserApplyDetails', param)
     },
     //添加汽车维修信息
-    addDriverRepair(param){
-        return post('addDriverRepair ',param)
+    addDriverRepair(param) {
+        return post('addDriverRepair ', param)
     },
     //添加汽车加油信
-    addDriverGasoline(param){
-        return post('addDriverGasoline ',param)
+    addDriverGasoline(param) {
+        return post('addDriverGasoline ', param)
+    },
+    //添加其他事项
+    addDriverMatter(param){
+      return post('addDriverMatter',param)
     }
 }
