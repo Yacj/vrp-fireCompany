@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <div class="header bg-blue">
+    <div class="header bg-blue padding-xl text-center">
       <div class="title">
         公务用车调度平台
       </div>
@@ -8,8 +8,8 @@
         <img src="../../../src/assets/img/login-bg.png" alt="">
       </div>
     </div>
-    <div class="wrapper">
-      <div class="login-form">
+    <div class="wrapper padding">
+      <div class="login-form margin-sm">
         <van-cell-group :border="false">
           <van-field v-model="phone" type="number" label="" left-icon="iconfont icon-phone" placeholder="请输入手机号码">
             <template slot="left-icon">
@@ -50,7 +50,7 @@
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
-import {isPhone, isPossWord, isWx} from "@/utils/validation";
+import {isPhone, isPossWord} from "@/utils/validation";
 import {Notify} from 'vant'
 import {UserService} from "@/api/user";
 import {storage} from "@/utils/utils";
@@ -74,10 +74,6 @@ export default {
     Login() {
       let phone = this.phone
       let password = this.password
-      if (!isWx) {
-        return this.$vAlert('提示', '请在微信内部登录').then(res => {
-        })
-      }
 
       if (!isPhone(phone)) {
         return Notify('手机号有误，请重新输入')
@@ -94,20 +90,15 @@ export default {
       UserService.logon(data).then(res => {
         let code = res.code
         if (code !== 200) {
-          return this.$vAlert('提示', `登录失败,${res.msg}`).then(res => {
-            console.log(res)
+          return this.$vAlert('', `登录失败,${res.msg}`).then(res => {
           })
         }
-        const {id, name, deptId} = res.data
-        let uid = id === null ? 0 : id
-        let userInfo = {
-          phone: name,
-          deptId,
-          uid
-        }
-        this.$store.dispatch('setUserAsync', userInfo)
-        storage.set('userInfo', userInfo)
-        this.$vAlert('提示', '登录成功').then(res => {
+        const {id, token} = res.data
+        const uid = id === null ? 0 : id
+        // this.$store.dispatch('setUserAsync', userInfo)
+        storage.set('uid', uid)
+        storage.set('token',token)
+        this.$vAlert('', '登录成功').then(res => {
           this.$router.push({
             path: '/user'
           })
@@ -129,14 +120,9 @@ export default {
 <style scoped lang="scss">
 #login {
   .header {
-    position: relative;
-    overflow-y: hidden;
-    padding: 40px 20px 50px;
-
     .title {
       font-size: 22px;
       letter-spacing: 2px;
-      text-align: center;
       font-weight: 400;
       color: rgba(255, 255, 255, 1);
     }
@@ -156,13 +142,10 @@ export default {
     top: -25px;
     background: #fff;
     display: block;
-    padding: 30px 15px 0;
     position: relative;
     border-radius: 30px 30px 0 0;
 
     .login-form {
-      margin: 10px;
-
       .tips {
         margin: 15px 0 0 20px;
       }

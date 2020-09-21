@@ -65,9 +65,9 @@ export default {
     let {id, deptId} = this.$route.query
     this.id = +id
     this.deptId = +deptId
-
-    this.chargeLeaderId = storage.get("userInfo").uid
-    this.chargeLeaderName = storage.get('wxInfo').name
+    const {uid:chargeLeaderId,username:carLeaderName} = storage.get("userInfo")
+    this.chargeLeaderId = chargeLeaderId
+    this.carLeaderName =carLeaderName
 
     this.getList()
     this.getCar()
@@ -78,7 +78,7 @@ export default {
       let id = this.id
       await homeService.GetOrderCheckList({id}).then(res => {
         this.Review = res.data[0]
-        let {carId, carName, carDriving, carPeopleId, carPeople} = this.Review
+        let {carId, carName, carDriving, carPeopleId, carPeople,username} = this.Review
         this.carId = carId
         this.carName = carName
         this.carDriving = carDriving
@@ -122,7 +122,7 @@ export default {
       let data = {
         id: this.id,
         carLeaderId: this.chargeLeaderId,
-        carLeaderName: this.chargeLeaderName,
+        carLeaderName:this.carLeaderName,
         carLeaderStatus: "通过",
         carId: this.carId,
         carName: this.carName,

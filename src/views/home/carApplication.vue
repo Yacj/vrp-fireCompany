@@ -164,9 +164,9 @@ export default {
       this.carPeopleId = data.id
     },
     Post() {
-      let {uid,deptId} = storage.get('userInfo')
+      let {uid:createId,deptId} = storage.get('userInfo')
       let data = {
-        createId:uid,
+        createId,
         deptId,
         createBy: this.CreateBy,
         entourage: this.entourage,

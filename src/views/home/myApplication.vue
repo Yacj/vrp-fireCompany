@@ -2,7 +2,7 @@
   <div id="myApplication">
     <navbar title="我的申请" :left-show="true" left-text="返回" class="navFixed"></navbar>
     <div class="wrapper margin-top-xll" v-if="applicationList.length > 0">
-      <list :list="applicationList"></list>
+      <list :list="applicationList" @getData="goRouter"></list>
       <refresh @click.native="reFresh"></refresh>
     </div>
     <div class="emptyCenter" v-else>
@@ -29,6 +29,7 @@ export default {
     }
   },
   created() {
+    this.id= this.$route.query.id
   },
   mounted() {
     this.getApplyList()
@@ -49,6 +50,14 @@ export default {
     },
     reFresh() {
       this.getApplyList()
+    },
+    goRouter(data){
+      if(this.id !== undefined){
+        const {id,carId} = data
+        this.$router.push({
+          path:'/returnVehicle?id='+id+'&carId='+carId
+        })
+      }
     }
   }
 }

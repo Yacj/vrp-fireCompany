@@ -1,20 +1,32 @@
 import Vue from 'vue'
-import { Cell, CellGroup } from 'vant';
-import { Tabbar, TabbarItem } from 'vant';
-import { Toast } from 'vant';
-import { Empty } from 'vant';
-import { NavBar } from 'vant';
-import { Tag } from 'vant';
-import { Field } from 'vant';
-import { Button } from 'vant';
-import { Icon } from 'vant';
-import { Grid, GridItem } from 'vant';
-import { Picker } from 'vant';
-import { Popup } from 'vant';
-import { Checkbox, CheckboxGroup } from 'vant';
-import { List } from 'vant';
-import { DatetimePicker } from 'vant';
+import {
+    Button,
+    Cell,
+    CellGroup,
+    Checkbox,
+    CheckboxGroup,
+    DatetimePicker,
+    Empty,
+    Field,
+    Grid,
+    GridItem,
+    Icon,
+    List,
+    NavBar,
+    Picker,
+    Popup,
+    Radio,
+    RadioGroup,
+    Tabbar,
+    TabbarItem,
+    Tag,
+    Toast,
+    Uploader
+} from 'vant';
 
+Vue.use(Radio);
+Vue.use(RadioGroup);
+Vue.use(Uploader);
 Vue.use(DatetimePicker);
 Vue.use(List);
 Vue.use(Checkbox);

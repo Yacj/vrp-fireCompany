@@ -15,8 +15,7 @@
                      v-model="Sure"
                      :columns="[{id:1,text:'是'},{id:2,text:'否'}]"
                      @getMessage="onConfirm"
-        >
-        </select-from>
+        />
         <div class="cu-bar bg-white">
           <div class="action">
               <span class="text-df text-black">
@@ -64,7 +63,7 @@
 
 <script>
 import Navbar from "@/components/Navbar/Navbar";
-import {getTime, storage} from "@/utils/utils";
+import {getTime} from "@/utils/utils";
 import SelectFrom from "@/components/select/selectFrom";
 import {homeService} from "@/api/home";
 
@@ -82,17 +81,18 @@ export default {
   },
   computed: {
     buttonStu() {
-      return this.Sure === '是' && this.message !== ''
+      return this.Sure !== '是/否' && this.message !== ''
     }
   },
   created() {
+    const {id, carId} = this.$route.query
     const time = Date.parse(new Date())
-    console.log(new Date())
     this.nowTime = getTime(time)
+    this.id = id
+    this.carId = carId
   },
   methods: {
     onConfirm(data) {
-      console.log(data)
       this.Sure = data.text
     },
     carBack() {
@@ -105,14 +105,17 @@ export default {
     },
     returnUserApply() {
       let data = {
-        id: storage.get("uid"),
+        id: +this.id,
+        carId: +this.carId,
         returnRemarks: this.message,
         returnIs: "已归还"
       }
       homeService.returnUserApply(data).then(res => {
-        let code = res.code
-        if(code !== 200){return this.$vAlert('',`归还失败,${res.msg}`)}
-        this.$vAlert('','归还成功').then(res=>{})
+        const code = res.code
+        if (code !== 200) {
+          return this.$vAlert('', `归还失败,${res.msg}`)
+        }
+        this.$vAlert('', '归还成功').then(res => {})
       })
     }
   }

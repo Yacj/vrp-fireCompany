@@ -1,6 +1,6 @@
 <template>
   <div id="List">
-    <div class="list" v-for="(item,index) in List" :key="index" @click="getId(item.id)">
+    <div class="list" v-for="(item,index) in List" :key="index" @click="getId(item.id,item.carId)">
       <div class="top padding flex align-center van-hairline--bottom">
         <div class="img">
           <img src="../../assets/img/Application-1.png" alt="">
@@ -43,9 +43,10 @@ export default {
     }
   },
   methods: {
-    getId(id) {
+    getId(id,carId) {
       let data = {
-        id
+        id,
+        carId
       }
       this.$emit('getData', data)
     }

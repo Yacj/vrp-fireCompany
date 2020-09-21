@@ -1,11 +1,11 @@
 <template>
   <div id="register">
-    <div class="header bg-white">
+    <div class="header bg-white padding-xl text-center">
       <div class="title text-black">
         注册
       </div>
     </div>
-    <div class="wrapper">
+    <div class="wrapper margin">
       <div class="register-form">
         <van-cell-group :border="false">
           <van-field v-model="phone" type="number" label="" left-icon="iconfont icon-phone" placeholder="请输入手机号码">
@@ -38,7 +38,7 @@
           </van-field>
         </van-cell-group>
       </div>
-      <div class="register-btn">
+      <div class="register-btn margin-top-xll">
         <van-button type="primary"
                     size="large"
                     class="btn"
@@ -128,13 +128,6 @@ export default {
       const phone = this.phone
       const password = this.password
       const code = this.code
-      const {openid, name: username} = storage.get("wxInfo")
-
-      if (openid === undefined) {
-        return this.$vConfirm('提示', '您尚未微信授权，请授权后再注册', '取消', '去授权').then(res => {
-          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb39a74613096584f&redirect_uri=https://www.tuopuvip.com/api/wxlogin.html&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
-        }).catch(err => {})
-      }
 
       if (!isPhone(phone)) {
         return Notify('手机号有误，请重新输入')
@@ -151,17 +144,15 @@ export default {
       const data = {
         name: phone,
         password,
-        openid,
-        username
       }
 
       UserService.register(data).then(res => {
         let code = res.code
         if (code !== 200) {
-          return this.$vAlert('提示', `注册失败,${res.msg}`).then(res => {
+          return this.$vAlert('', `注册失败,${res.msg}`).then(res => {
           })
         }
-        this.$vAlert('提示', '注册成功,请返回重新登录').then(res => {
+        this.$vAlert('', '注册成功,请返回重新登录').then(res => {
           this.$router.back()
         })
       })
@@ -176,24 +167,15 @@ export default {
 <style scoped lang="scss">
 #register {
   .header {
-    position: relative;
-    overflow-y: hidden;
-    padding: 40px 20px 30px;
-
     .title {
       font-size: 22px;
       letter-spacing: 2px;
-      text-align: center;
       font-weight: 400;
     }
   }
 
   .wrapper {
-    margin: 15px;
-
     .register-btn {
-      margin-top: 30px;
-
       .btn {
         font-size: 18px;
         letter-spacing: 5px;

@@ -29,24 +29,26 @@
         </div>
       </van-cell-group>
       <transition name="fade">
-        <div class="leader-name margin-lg box-shadow flex align-center" style="height:50px" v-if="checked === true">
-         <span class="margin-left">
-         上级领导:<template v-for="(item,index) in LeaderList">
-                {{item.username}}
-                </template>
+        <div class="leader-name margin-lg box-shadow flex align-center" style="height:85px" v-if="checked === true">
+         <span class="margin-left" style="width: 100%">
+         上级领导:<van-radio-group v-model="radio" direction="horizontal">
+            <template v-for="(item,index) in LeaderList">
+                           <van-radio :name="index+1" @click="selectLeader(item)">{{item.username}}</van-radio>
+            </template>
+           </van-radio-group>
          </span>
         </div>
       </transition>
     </div>
     <div class="button padding">
-      <van-button type="primary"
-                  size="large"
-                  class="margin-bottom"
-                  style="letter-spacing: 2px"
-                  color="#4161FF"
-                  round
-                  @click="goRouter"
-                  :disabled="isDisabled === false">
+      <van-button
+          size="large"
+          class="margin-bottom"
+          style="letter-spacing: 2px"
+          color="#4161FF"
+          round
+          @click="goRouter"
+          :disabled="isDisabled === false">
         审核通过
       </van-button>
       <van-button type="info" size="large" style="letter-spacing: 2px" plain hairline round>审核不通过</van-button>
@@ -73,23 +75,16 @@ export default {
       checked: false,
       LeaderList: [],
       id: 0,
-      deptId: 0
+      deptId: 0,
+      radio: 1
     }
   },
   created() {
     let {id, deptId} = this.$route.query
-
     this.id = +id
     this.deptId = +deptId
 
     this.title = this.deptId === 22 ? '分管领导审核' : '主官领导审核'
-
-    let {uid, phone} = storage.get('userInfo')
-
-    this.chargeLeaderId = uid
-    this.directorLeaderPhone = phone
-
-    this.chargeLeaderName = storage.get('wxInfo').name
 
     this.getList()
     this.getLeader()
@@ -102,49 +97,68 @@ export default {
         this.Review = res.data[0]
       })
     },
-    getLeader() {
-      homeService.GetDirectorLeader().then(res => {
+    async getLeader() {
+      await homeService.GetDirectorLeader().then(res => {
         this.LeaderList = res.data
+        const {id, username, name} = this.LeaderList[0]
+        this.chargeLeaderId = id
+        this.directorLeaderPhone = name
+        this.chargeLeaderName = username
       })
     },
     goRouter() {
-      this.deptId === 22 ? this.ChargeLeaderCheck() : this.DirectorLeaderCheck()
+      if(this.deptId === 17){
+        this.DirectorLeaderCheck()
+        return
+      }
+      this.checked === true ? this.ChargeLeaderCheck() : this.DirectorLeaderCheck()
+    },
+    selectLeader(e) {
+      const {id, username, name} = e
+      this.chargeLeaderId = id
+      this.directorLeaderPhone = name
+      this.chargeLeaderName = username
     },
     ChargeLeaderCheck() {
-      let directorLeaderIs = this.checked === true ? 1 : ''
-      let data = {
-        id: this.id,
+      const id = this.id
+      const directorLeaderIs = this.checked === true ? 1 : ''
+      const data = {
+        id,
         chargeLeaderId: this.chargeLeaderId,
         chargeLeaderName: this.chargeLeaderName,
-        directorLeaderPhone:this.directorLeaderPhone,
+        directorLeaderPhone: this.directorLeaderPhone,
         chargeLeaderStatus: "通过",
+        createBy: this.Review.createBy,
         directorLeaderIs
       }
+      console.log(data)
       homeService.ChargeLeaderCheck(data).then(res => {
         let code = res.code
         let text = this.checked === true ? '提交成功,已提交给主官领导审批' : '审核成功'
 
         if (code !== 200) {
-          return this.$vConfirm('', `审核失败 ${res.msg}`).then(res => {
+          return this.$vConfirm('', `提交失败 ${res.msg}`).then(res => {
           })
         }
-
         this.$vConfirm('', text, '取消', '返回审核列表').then(res => {
           this.$router.back()
         }).catch(error => {
         })
-
       })
     },
     DirectorLeaderCheck() {
-      let directorLeaderIs = this.checked === true ? 1 : ''
+      const directorLeaderIs = this.checked === true ? 1 : ''
+      const id = this.id
+      const {username: directorLeaderName, uid: directorLeaderId} = storage.get('userInfo');
+
       let data = {
-        id: this.id,
-        directorLeaderId: this.chargeLeaderId,
-        directorLeaderName: this.chargeLeaderName,
+        id,
+        directorLeaderId,
+        directorLeaderName,
         directorLeaderStatus: "通过",
         directorLeaderIs
       }
+      console.log(data)
       homeService.DirectorLeaderCheck(data).then(res => {
         let code = res.code
         if (code !== 200) {
@@ -177,6 +191,10 @@ export default {
 
   .van-field__control:disabled {
     color: #000000;
+  }
+
+  .van-radio {
+    height: 50px;
   }
 }
 

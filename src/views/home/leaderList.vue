@@ -37,8 +37,9 @@ export default {
     }
   },
   created() {
-    let deptId = storage.get("userInfo").deptId
-    if (deptId === 27 || deptId === 28) {
+    const {deptId,deptName} = storage.get("userInfo")
+
+    if (deptId === 27 || deptName.includes("科室") === true) {
       return this.$vAlert('', '此页面需主管权限才可进入').then(res => {
         this.$router.back()
       })

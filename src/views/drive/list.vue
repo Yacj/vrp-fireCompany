@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="noData emptyCenter" v-else>
-      <van-empty description="暂无车辆列表信息" />
+      <van-empty description="暂无车辆列表信息"/>
     </div>
     <back-top></back-top>
   </div>
@@ -34,6 +34,7 @@
 import {DriverServe} from "@/api/Driver";
 import Navbar from "@/components/Navbar/Navbar";
 import BackTop from "@/components/floatButton/backTop";
+import {storage} from "@/utils/utils";
 
 export default {
   name: "list",
@@ -47,18 +48,20 @@ export default {
     this.getDriveList()
     this.queryId = this.$route.query.id
   },
-  activated(){
+  activated() {
+    this.queryId = this.$route.query.id
     this.getDriveList()
   },
   methods: {
     async getDriveList() {
+      const carPeopleId = storage.get('uid')
       this.$toast({
-        type:'loading',
-        message:'加载中....',
-        mask:true
+        type: 'loading',
+        message: '加载中....',
+        mask: true
       })
       await DriverServe.getDriverUserApply({
-        carPeopleId: 9
+        carPeopleId
       }).then(res => {
         this.$toast.clear()
         this.DriveList = res.data

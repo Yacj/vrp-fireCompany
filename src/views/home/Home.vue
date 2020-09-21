@@ -48,7 +48,7 @@
         </div>
       </template>
     </div>
-    <div style="height: 50px"></div>
+    <div style="height: 50px" v-if="deptId !== 27"></div>
     <tabbar :active="0"></tabbar>
   </div>
 </template>
@@ -57,7 +57,6 @@
 import Tabbar from "../../components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
 import {storage} from "@/utils/utils";
-import user from "@/views/user/user";
 
 export default {
   name: 'Home',
@@ -81,7 +80,7 @@ export default {
           leftImg: require('../../assets/img/home-icon3.png'),
           topTitle: '车辆归还',
           bottomTitle: '用车完毕，还车入库',
-          url: '/returnVehicle',
+          url: '/myApplication?id=1',
         },
         {
           leftImg: require('../../assets/img/home-icon4.png'),
@@ -94,17 +93,17 @@ export default {
         {
           icon: require('../../assets/img/home-icon5.png'),
           text: '车辆维修',
-          url:'/home'
+          url: '/home'
         },
         {
           icon: require('../../assets/img/home-icon6.png'),
           text: '加油登记',
-          url:'/drive/fuel'
+          url: '/drive/fuel'
         },
         {
           icon: require('../../assets/img/home-icon7.png'),
           text: '其它事项',
-          url:'/home'
+          url: '/home'
         }
       ],
       deptId: 0
@@ -112,23 +111,36 @@ export default {
   },
   created() {
     let userInfo = storage.get('userInfo')
-    console.log(userInfo)
-    if(userInfo !== null){
+    if (userInfo !== null) {
       this.userInfo = userInfo
       this.deptId = this.userInfo.deptId
     }
   },
   methods: {
     goRouter(url, id) {
-      if (this.deptId === 0) {
-        return this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆')
-            .then(res => {
-              this.$router.push({
-                path: '/user/login'
-              })
-            })
-            .catch(err => {
-            })
+      if (this.userInfo === undefined) {
+        return this.$vConfirm('', '您尚未登录，请登录后重试', '取消', '去登陆').then(res => {
+          this.$router.push({
+            path: '/user/login'
+          })
+        }).catch(err => {
+        })
+      }
+      let deptId = this.deptId
+      switch (deptId) {
+        case (27):
+          return this.$vAlert('', '您是驾驶员，无权限进入此页面')
+        case (0):
+          return this.$vAlert('', '您暂无权限，无法进入页面').then(res => {
+          })
+      }
+      if (this.userInfo.username === null) {
+        return this.$vConfirm('', '您暂未填写用户名，请填写完成后再操作', '返回', '去填写').then(res => {
+          this.$router.push({
+            path: '/user/info'
+          })
+        }).catch(err => {
+        })
       }
       this.$router.push({
         path: url

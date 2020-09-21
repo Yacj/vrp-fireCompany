@@ -3,22 +3,24 @@
     <navbar title="我的"></navbar>
     <div class="header flex align-center bg-blue text-white">
       <div class="header-left">
-        <img :src="userInfo.avatar === undefined ? require('../../assets/img/Avatar.png'):userInfo.avatar" alt=""
-             class="round">
+        <img
+            :src="userInfo.img === undefined ? require('../../assets/img/Avatar.png'):(userInfo.img === null ?require('../../assets/img/Avatar.png'):imgUrL+userInfo.img)"
+            alt=""
+            class="round">
       </div>
       <div class="header-right">
-        <template v-if="userInfo.name === undefined ">
+        <template v-if="userInfo.username === undefined ">
           <router-link to="/user/login" class="text-lg flex align-center">请登录</router-link>
         </template>
         <template v-else>
           <router-link to="/user/info">
             <div class="flex">
-              <div class="text-lg text-bold">{{ userInfo.name }}</div>
+              <div class="text-lg text-bold">{{ userInfo.username === null ? userInfo.name : userInfo.username }}</div>
               <div class="user-btn text-sm">
                 <span>{{Permissions}}</span>
               </div>
             </div>
-            <p class="text-lg text-bold">{{ userInfo.phone }}</p>
+            <p class="text-lg text-bold" v-if="userInfo.username !== null">{{ formatPhone(userInfo.name) }}</p>
           </router-link>
         </template>
       </div>
@@ -31,7 +33,7 @@
                     v-for="(item,index) in cellList"
                     :key="index"
                     @click="goPath(item.url)">
-            <template slot="icon" >
+            <template slot="icon">
               <img :src="item.icon" :alt="item.text">
             </template>
           </van-cell>
@@ -45,13 +47,15 @@
 <script>
 import Tabbar from "@/components/Tabbar/Tabbar";
 import Navbar from "@/components/Navbar/Navbar";
-import {storage} from "@/utils/utils";
+import {BaseUrl, storage} from "@/utils/utils";
+import {UserService} from "@/api/user";
 
 export default {
   name: "user",
   components: {Navbar, Tabbar},
   data() {
     return {
+      imgUrL: BaseUrl,
       userInfo: {},
       getInfo: {},
       cellList: [
@@ -62,7 +66,7 @@ export default {
         },
         {
           icon: require('../../assets/img/user-icon3.png'),
-          text: '其它',
+          text: '信息修改',
           url: '/user/info'
         }
       ],
@@ -70,39 +74,41 @@ export default {
     }
   },
   created() {
-    let userInfo = storage.get('userInfo')
-    let wxInfo = storage.get('wxInfo')
-
-    if (userInfo !== null) {
-      this.getInfo = {...userInfo, ...wxInfo}
-    }
     this.getUserInfo()
   },
   methods: {
+    formatPhone(p) {
+      return p.substring(0, 3) + '*****' + p.substring(p.length - 2);
+    },
     getUserInfo() {
-      if (this.getInfo.phone !== undefined) {
-        this.userInfo = this.getInfo
-        const list = new Map([
-          [0, '暂无权限'],
-          [17, '主管领导'],
-          [22, '消防科室分管领导'],
-          [26, '车管领导'],
-          [27, '驾驶员'],
-          [28, '消防科室']
-        ])
-        const userPermissions = (id) => {
-          return list.get(id)
+      const Getuid = storage.get('uid')
+      if (Getuid === null) return
+      UserService.getUser({id: Getuid}).then(res => {
+        const {id: uid, username, name: phone, deptName} = res.data
+        this.userInfo = res.data
+        const deptId = this.userInfo.deptId !== null ? this.userInfo.deptId : 0
+        const userInfo = {deptId, uid, username, phone, deptName}
+        if (deptName === null) {
+          this.Permissions = '暂无权限'
+        } else {
+          this.Permissions = deptName
         }
-        this.Permissions = userPermissions(this.userInfo.deptId)
-        // if (this.userInfo.deptId === null) {
-        //   this.Permissions = '暂无权限'
-        // } else {
-        //   this.Permissions =
+        storage.set('userInfo', userInfo)
+        // const list = new Map([
+        //   [0, '暂无权限'],
+        //   [17, '主管领导'],
+        //   [22, '消防科室分管领导'],
+        //   [26, '车管领导'],
+        //   [27, '驾驶员'],
+        //   [28, '消防科室']
+        // ])
+        // const userPermissions = (id) => {
+        //   return list.get(id)
         // }
-      }
+      })
     },
     goPath(url) {
-      if (this.getInfo.phone === undefined) {
+      if (this.userInfo.name === undefined) {
         return this.$vConfirm('', '您尚未登录，请登录后重试', '返回', '去登陆')
             .then((res) => {
               this.$router.push({
